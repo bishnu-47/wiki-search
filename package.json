@@ -15,6 +15,7 @@
   "devDependencies": {
     "autoprefixer": "^10.2.6",
     "postcss": "^8.3.5",
+    "tailwind-dracula": "^1.0.5",
     "tailwindcss": "^2.2.4"
   }
 }
