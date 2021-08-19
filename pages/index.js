@@ -2,13 +2,17 @@ import { useRef, useState } from "react";
 import Head from "next/head";
 
 import SearchResultList from "../components/SearchResultList";
+import LoadingIcon from "../components/loading-icon.js";
 
 export default function Home() {
   const wikiSearchRef = useRef();
   const [resultsArr, setResultsArr] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   function formSubmitHandler(e) {
     e.preventDefault();
+    setIsLoading(true);
+
     const searchReq = wikiSearchRef.current.value.trim();
     if (searchReq === "") return;
 
@@ -19,6 +23,10 @@ export default function Home() {
       .then((data) => {
         // console.log(data.query.search);
         setResultsArr(data.query.search);
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }
 
@@ -36,19 +44,21 @@ export default function Home() {
         <input
           type="text"
           ref={wikiSearchRef}
-          className="bg-cullen p-2 font-bold text-aro"
+          className="bg-cullen w-full mb-2 md:w-min p-2 font-bold text-aro"
           placeholder="Search Something..."
         />
         <button
           type="submit"
-          className="text-cullen font-bold bg-dracula-purple px-4 py-2"
+          className="text-cullen w-full md:w-min font-bold bg-dracula-purple px-4 py-2"
         >
           Search
         </button>
       </form>
-      <div>
+      {isLoading ? (
+        <LoadingIcon />
+      ) : (
         <SearchResultList resultsArr={resultsArr} />
-      </div>
+      )}
     </div>
   );
 }
